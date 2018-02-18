@@ -1,0 +1,6 @@
+[submodule "third/mockf"]
+	path = third/mockf
+	url = ../mockf
+[submodule "third/amalgamate"]
+	path = third/amalgamate
+	url = ../amalgamate

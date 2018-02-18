@@ -1,0 +1,15 @@
+{
+    "project": "CONF for C++",
+    "target": "single_include/fdmngr.h",
+    "include_paths": [
+        "include"
+    ],
+    "sources": [
+        "include/fdmngr_socket.h",
+        "include/fdmngr_tool.h",
+        "include/fdmngr.h",
+        "src/fdmngr_socket.c",
+        "src/fdmngr_tool.c",
+        "src/fdmngr.c"
+    ]
+}

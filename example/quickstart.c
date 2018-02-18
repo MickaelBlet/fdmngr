@@ -1,10 +1,3 @@
-# Fd Manager
-
-Manage your file descriptor in C.
-
-## Quick Start
-
-```c
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -15,11 +8,11 @@ Manage your file descriptor in C.
 void stdin_callback(fdmngr_t* pm, int fd, short revents, void* user_data) {
     (void)user_data;
     if (revents & POLLIN) {
-        char buffer[25];
+        char buffer[10];
         int bytes = read(fd, buffer, sizeof(buffer) - 1);
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            printf("Input: %s\n", buffer);
+            printf("Result of input: %s", buffer);
         }
         else {
             printf("Disconnected or EOF\n");
@@ -36,23 +29,20 @@ int main(int argc, char* argv[]) {
     (void)argc;
     (void)argv;
 
-    printf("woot?\n");
-    printf("%ld\n", sizeof(fdmngr_t));
-
-    fdmngr_t* manager = fdmngr_create(1024);
+    fdmngr_t* manager = fdmngr_create(1);
     if (manager == NULL) {
-        return (-1);
+        return -1;
     }
 
-    fdmngr_add(manager, 0, POLLIN, FDMNGR_NOT_AUTOMATIC_CLOSING,
-               &stdin_callback,
+    fdmngr_add(manager, 0, POLLIN | POLLHUP | POLLERR,
+               FDMNGR_NOT_AUTOMATIC_CLOSING, &stdin_callback,
                NULL); // Monitor stdin
 
-    while (fdmngr_poll(manager, 10000) >= 0) {
+    printf("Input: ");
+    fflush(stdout);
+    while (fdmngr_poll(manager, 300000) >= 0) {
         // continue looping
     }
-
     fdmngr_destroy(manager);
     return 0;
 }
-```
